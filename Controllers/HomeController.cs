@@ -1,5 +1,4 @@
 ﻿using FakeApi.Models;
-using FakeApi.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

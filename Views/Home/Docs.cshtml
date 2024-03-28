@@ -1,6 +1,128 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Docs - ";
+    string urlBase = "https://localhost:7222";
 }
-<h1>@ViewData["Title"]</h1>
+<h1>Docs</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container m-md-5">
+    <p class="h3">Why FakeApi?</p>
+    <p class="m-2">With this api you have a safe environment to test your fetchs or mockup a website without real data.</p>
+    <hr />
+    <p class="h3">GET methods</p>
+    <p class="m-2">You can obtain a list of all products with:</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetProducts")</code></pre>
+    <p>A few examples:</p>
+    <p>Javascript</p>
+    <pre><code class="">fetch('@(urlBase + "/FakeApi/GetProducts")')
+    .then(res => res.json())
+    .then(json => console.log(json));</code></pre>
+    <p>C#</p>
+    <pre><code class="">using (HttpClient client = new HttpClient())
+{
+    HttpResponseMessage response = await client.GetAsync("@(urlBase + "/FakeApi/GetProducts")");
+    string responseBody = await response.Content.ReadAsStringAsync();
+    Console.WriteLine(responseBody);
+}</code></pre>
+    <p>Python</p>
+    <pre><code>import requests
+response = requests.get("@(urlBase + "/FakeApi/GetProducts")")
+data = response.json()
+print(data)</code></pre>
+    <p>For the other GET methods just change the url.</p>
+    <p>Get a single product:</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetProducts/{id}")</code></pre>
+    <p>Get products by their category:</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetProductCategory/{CategoryId}")</code></pre>
+    <p>Get a list of all categories</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetCategories")</code></pre>
+    <p>Get a category by name:</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetCategories/Name/{name}")</code></pre>
+    <p>Get a category by id:</p>
+    <pre><code class="language-html">GET @(urlBase + "/FakeApi/GetCategories/{id}")</code></pre>
+    <p class="h3">POST methods</p>
+    <p class="m-2">You can add a product with:</p>
+    <pre><code class="language-html">POST @(urlBase + "/FakeApi/AddProduct")</code></pre>
+    <p class="text-danger">The API is fake, no real changes are made to the database.</p>
+    <p>You need to attach to the body a json with the product data, except the id. A few examples:</p>
+    <p>Javascript</p>
+    <pre><code>const postData = {
+    title: "Majestic Mountain Graphic T-Shirt",
+    description: "Elevate your wardrobe with this stylish black t-shirt featuring a striking monochrome mountain range graphic.",
+    price: 44,
+    images: "https://i.imgur.com/QkIa5tT.jpeg,https://i.imgur.com/jb5Yu0h.jpeg,https://i.imgur.com/UlxxXyG.jpeg",
+    category_Id: "1"
+};
+fetch('@(urlBase + "/FakeApi/AddProduct")', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(postData)
+}).then(response => response.json())
+    .then(data => console.log(data));</code></pre>
+    <p>C#</p>
+    <pre><code>var postData = new
+{
+    title = "Majestic Mountain Graphic T-Shirt",
+    description = "Elevate your wardrobe with this stylish black t-shirt featuring a striking monochrome mountain range graphic.",
+    price = 44,
+    images = "https://i.imgur.com/QkIa5tT.jpeg,https://i.imgur.com/jb5Yu0h.jpeg,https://i.imgur.com/UlxxXyG.jpeg",
+    category_Id = "1"
+};
+using (HttpClient client = new HttpClient())
+{
+    var json = Newtonsoft.Json.JsonConvert.SerializeObject(postData);
+    var data = new StringContent(json, Encoding.UTF8, "application/json");
+    HttpResponseMessage response = await client.PostAsync("@(urlBase + "/FakeApi/AddProduct")", data);
+    string responseBody = await response.Content.ReadAsStringAsync();
+    Console.WriteLine(responseBody);
+}</code></pre>
+    <p>Python</p>
+    <pre><code>import requests
+import json
+
+postData = {
+    "title": "Majestic Mountain Graphic T-Shirt",
+    "description": "Elevate your wardrobe with this stylish black t-shirt featuring a striking monochrome mountain range graphic.",
+    "price": 44,
+    "images": "https://i.imgur.com/QkIa5tT.jpeg,https://i.imgur.com/jb5Yu0h.jpeg,https://i.imgur.com/UlxxXyG.jpeg",
+    "category_Id": "1"
+}
+headers = {"Content-type": "application/json"}
+
+response = requests.post("@(urlBase + "/FakeApi/AddProduct")", data=json.dumps(postData), headers=headers)
+data = response.json()
+print(data)</code></pre>
+    <p>You also have a POST method for categories:</p>
+    <pre><code class="language-html">POST @(urlBase + "/FakeApi/AddCategory")</code></pre>
+    <p>Just change the json in the body to match the category json.</p>
+    <p class="h3">DELETE methods</p>
+    <p class="m-2">You can delete a product with:</p>
+    <pre><code class="language-html">POST @(urlBase + "/FakeApi/DeleteProduct/{id}")</code></pre>
+    <p class="text-danger">The API is fake, no real changes are made to the database.</p>
+    <p>A few examples:</p>
+    <p>Javascript</p>
+    <pre><code>const id = "2d0269ab-75b6-48f8-88aa-0f9f6fa4ee87";
+fetch(`@(urlBase + "/FakeApi/DeleteProduct/")${id}`, {
+    method: 'DELETE'
+}).then(response => response.json())
+    .then(data => console.log(data));</code></pre>
+    <p>C#</p>
+    <pre><code>string id = "2d0269ab-75b6-48f8-88aa-0f9f6fa4ee87";
+using (HttpClient client = new HttpClient())
+{
+    HttpResponseMessage response = await client.DeleteAsync($"@(urlBase + "/FakeApi/DeleteProduct/"){productId}");
+    string responseBody = await response.Content.ReadAsStringAsync();
+    Console.WriteLine(responseBody);
+}</code></pre>
+    <p>Python</p>
+    <pre><code>import requests
+import json
+
+ìd = "2d0269ab-75b6-48f8-88aa-0f9f6fa4ee87"
+response = requests.delete(f"@(urlBase + "/FakeApi/DeleteProduct"){id}")
+data = response.json()
+print(data)</code></pre>
+    <p>There is also a method for deleting categories:</p>
+    <pre><code class="language-html">POST @(urlBase + "/FakeApi/DeleteCategory/{id}")</code></pre>
+</div>
